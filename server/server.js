@@ -11,10 +11,20 @@ const io = require('socket.io')(server);
 
 //data management stuff
 let counter = 0;
+const usersArray = [];
 
-
+//io connection
 io.on('connection', (socket) =>
 {
+    function UpdateUsers() {
+        let usernames = [];
+        for(const user of usersArray){
+            usernames.push(user.myUsername);
+        }
+        console.log("updating users...");
+        io.emit('users', usernames)
+    };
+
     //what to do on connection
     console.log(counter + ' someone connected');
     counter++;
@@ -22,7 +32,10 @@ io.on('connection', (socket) =>
     //join logic
     socket.on('join', (data) =>
     {
-       console.log(data);
+        console.log(data + ' has joined the server on socket id ' + socket.id);
+        usersArray.push(new User(data, socket.id));
+
+        UpdateUsers();
     });
 
     //send to all logic
@@ -35,21 +48,40 @@ io.on('connection', (socket) =>
     });
 
     //send to self logic
-    socket.on('sendToSelf', (data) =>{
+    socket.on('sendToSelf', (data) =>
+    {
         socket.emit('displayMessage', (data));
     })
 
-    socket.on('disconnect', ()=>
+    socket.on('disconnect', () =>
     {
+        let foundId = usersArray.findIndex(user => user.mySocketId == socket.id)
+        if (foundId >= 0) {
+
+            console.log(usersArray[foundId].myUsername + ' has disconnected');
+            usersArray.splice(foundId);
+        }
+        else {
+            console.log("someone disconnected but the id cannot be found");
+        }
+
         counter--;
-        console.log(counter + ' user disconnected');
+
+        UpdateUsers();
     })
 });
-
 
 server.listen(port, () =>
 {
     //what to do when server starts to run
     console.log("server running on " + port);
 });
+
+class User
+{
+    constructor(username, socketId) {
+        this.myUsername = username;
+        this.mySocketId = socketId;
+    }
+}
 

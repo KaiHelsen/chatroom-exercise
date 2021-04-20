@@ -12,28 +12,40 @@
     <h1 class="text-centered">welcome to this experimental chatroom</h1>
 </header>
 <div class="container-fluid w-100 vh-100">
-    <div id="login" class="m-auto col-3">
+    <div id="loginScreen" class="m-auto col-3">
         <h3>Please choose a username before you can enter the chat!</h3>
         <div>
             <label for="nameInput">display name:</label>
             <input type="text" id="nameInput" class="w-100 mb-2" required="required">
+            <button type="submit" id="loginButton" class="btn btn-primary">Log in!</button>
         </div>
     </div>
-    <div class="row mx-auto h-75" hidden="hidden">
+    <div id="chatScreen" class="row mx-auto h-75" hidden="hidden">
         <div class="col col-4 h-50 p-3">
-
-            <div>
-                <label for="postInput">post:</label>
-                <textarea type="text" id="postInput" class="w-100" required="required"></textarea>
+            <div class="">
+                <div>
+                    <label for="postInput">post:</label>
+                    <textarea type="text" id="postInput" class="w-100" required="required"></textarea>
+                </div>
+                <br>
+                <div class="row">
+                    <button type="submit" id="toAll" name="toAll" class="col mx-5 btn btn-primary">Send to all</button>
+                    <button type="submit" id="toSelf" name="toSelf" class="col mx-5 btn btn-secondary">Send to self
+                    </button>
+                </div>
             </div>
-            <br>
-            <div class="row">
-                <button type="submit" id="toAll" name="toAll" class="col mx-5 btn btn-primary">Send to all</button>
-                <button type="submit" id="toSelf" name="toSelf" class="col mx-5 btn btn-secondary">Send to self</button>
+            <div>
+                <table class="w-100 h-50">
+                    <tr>
+                        <th>users</th>
+                    </tr>
+                    <tr id="activeUsers">
+                    </tr>
+                </table>
             </div>
 
         </div>
-        <div class="col h-100 overflow-auto">
+        <div class="col h-100 overflow-auto border border-primary">
             <div>
                 <table id="target">
                 </table>
@@ -51,7 +63,7 @@
 <template id="postTemplate">
     <tr>
         <td class="name text-primary"></td>
-        <td>says : </td>
+        <td>says :</td>
         <td class="post text-dark"></td>
     </tr>
 </template>
