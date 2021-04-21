@@ -35,12 +35,7 @@
                 </div>
             </div>
             <div>
-                <table class="w-100 h-50">
-                    <tr>
-                        <th>users</th>
-                    </tr>
-                    <tr id="activeUsers">
-                    </tr>
+                <table id="activeUsers" class="w-100 h-50">
                 </table>
             </div>
 
@@ -62,9 +57,25 @@
 
 <template id="postTemplate">
     <tr>
-        <td class="name text-primary"></td>
-        <td>says :</td>
-        <td class="post text-dark"></td>
+        <td>
+            <span class="name text-primary"></span>
+            <span>says :</span>
+            <span class="post text-dark"></span>
+        </td>
+    </tr>
+</template>
+
+<template id="notificationTemplate">
+    <tr>
+        <td class="text-danger">placeholder</td>
+    </tr>
+</template>
+
+<template id="activeUserTemplate">
+    <tr>
+        <td>
+            <button class="btn btn-danger">placeholder</button>
+        </td>
     </tr>
 </template>
 <!--// necessary scripts //-->

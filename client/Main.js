@@ -14,7 +14,9 @@ const sendToAll = document.getElementById('toAll');
 const sendToSelf = document.getElementById('toSelf');
 
 //templates
-const postTemplate = document.getElementById("postTemplate")
+const postTemplate = document.getElementById("postTemplate");
+const notificationTemplate = document.getElementById("notificationTemplate");
+const activeUserTemplate = document.getElementById("activeUserTemplate");
 
 /**
  * post class to add some extra structure to the posting system
@@ -57,24 +59,45 @@ sendToSelf.addEventListener("click", ()=>
 socket.on('displayMessage', (data) =>
 {
     let clone = postTemplate.content.cloneNode(true);
-    let content = clone.querySelectorAll('td');
+    let content = clone.querySelectorAll('span');
     content[0].textContent = data.name;
     content[2].textContent = data.message;
     target.appendChild(clone);
     // target.innerHTML += '<br>' + data.name + ': '+ data.message;
 });
 
+socket.on('notification', (notification) =>{
+    let clone = notificationTemplate.content.cloneNode(true);
+    let content = clone.querySelector('td');
+    content.innerText = notification;
+    target.appendChild(clone);
+});
+
+socket.on('shenanigans', ()=>{
+   console.log('yeet!');
+   location.reload();
+});
+
 socket.on('users', (listOfUsernames) =>
 {
     //first, empty the table entirely
     activeUsers.innerHTML = "";
+
+    console.log(listOfUsernames);
     //next, start populating the table.
     listOfUsernames.forEach((name)=>{
-        let row = document.createElement('tr');
-        let data = document.createElement('td');
-        data.innerText = name;
-        row.appendChild(data);
-        activeUsers.appendChild(row);
+
+        console.log("bloop");
+        let clone = activeUserTemplate.content.cloneNode(true);
+        let btn = clone.querySelector('button');
+        btn.innerText = name;
+        btn.id = name;
+        activeUsers.appendChild(clone);
+
+        btn.addEventListener("click", ()=>{
+            console.log("shenanigans in action...");
+            socket.emit('messWithUser', btn.id);
+        })
     });
 
 });
